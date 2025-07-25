@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎂 Birthday Desktop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      background: url('https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    .desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .desktop-icon {
+      text-align: center;
+      width: 100px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .desktop-icon img {
+      width: 64px;
+      height: 64px;
+    }
+
+    #loading-screen {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 240, 245, 0.95);
+      justify-content: center;
+      align-items: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: #d63384;
+      z-index: 1000;
+    }
+
+    .file-manager-window {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      max-width: 90%;
+      height: 420px;
+      background: #ffffffee;
+      border: 2px solid #ccc;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      z-index: 10;
+      overflow: auto;
+    }
+
+    .file-manager-header {
+      background: #eeeeee;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close {
+      color: red;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .file-manager-body {
+      padding: 15px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .folder {
+      width: 120px;
+      text-align: center;
+      color: #000;
+      cursor: pointer;
+      user-select: none;
+      font-size: 16px;
+    }
+
+    .folder span {
+      font-size: 64px;
+      display: block;
+    }
+
+    .window-content {
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .image-thumb {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    /* Fullscreen viewer */
+    #viewer {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      touch-action: pan-y;
+    }
+
+    #viewer img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+    }
+
+    #viewer .close-viewer {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      background: rgba(0,0,0,0.4);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .file-manager-window {
+        width: 90%;
+        height: 80%;
+      }
+
+      .image-thumb {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading screen -->
+  <div id="loading-screen">🎉 Happiest Birthday to you 🎉</div>
+
+  <!-- Desktop -->
+  <div class="desktop">
+    <div class="desktop-icon" onclick="openFileManager()">
+      <img src="https://img.icons8.com/fluency/96/folder-invoices.png" />
+      <div>File Manager</div>
+    </div>
+
+    <!-- File Manager -->
+    <div class="file-manager-window" id="file-manager">
+      <div class="file-manager-header">
+        🎂 Birthday File Manager
+        <span class="close" onclick="closeWindow('file-manager')">✖</span>
+      </div>
+      <div class="file-manager-body">
+        <div class="folder" onclick="openFolder('photos')">
+          <span>📁</span>Photos
+        </div>
+        <div class="folder" onclick="openFolder('greetings')">
+          <span>📁</span>Birthday Greetings
+        </div>
+      </div>
+    </div>
+
+    <!-- Photos Folder -->
+    <div class="file-manager-window" id="photos">
+      <div class="file-manager-header">
+        📁 Photos
+        <span class="close" onclick="closeWindow('photos')">✖</span>
+      </div>
+      <div class="window-content">
+        <img class="image-thumb" src="photos/photo1.jpg" />
+        <img class="image-thumb" src="photos/photo2.jpg" />
+        <img class="image-thumb" src="photos/photo3.jpg" />
+      </div>
+    </div>
+
+    <!-- Greetings Folder -->
+    <div class="file-manager-window" id="greetings">
+      <div class="file-manager-header">
+        📁 Birthday Greetings
+        <span class="close" onclick="closeWindow('greetings')">✖</span>
+      </div>
+      <div class="window-content">
+        <img class="image-thumb" src="greetings/greet1.jpg" />
+        <img class="image-thumb" src="greetings/greet2.jpg" />
+        <img class="image-thumb" src="greetings/greet3.jpg" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Viewer -->
+  <div id="viewer">
+    <span class="close-viewer" onclick="closeViewer()">✖</span>
+    <img id="viewer-img" src="" />
+  </div>
+
+  <script>
+    let currentImages = [];
+    let currentIndex = 0;
+
+    function openFileManager() {
+      document.getElementById("loading-screen").style.display = "flex";
+      setTimeout(() => {
+        document.getElementById("loading-screen").style.display = "none";
+        document.getElementById("file-manager").style.display = "block";
+      }, 1500);
+    }
+
+    function openFolder(id) {
+      closeAllWindows();
+      document.getElementById(id).style.display = "block";
+    }
+
+    function closeWindow(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function closeAllWindows() {
+      ['photos', 'greetings'].forEach(id => {
+        document.getElementById(id).style.display = "none";
+      });
+    }
+
+    document.querySelectorAll('.image-thumb').forEach((img, index) => {
+      img.addEventListener('click', function () {
+        const parent = img.closest('.window-content');
+        currentImages = Array.from(parent.querySelectorAll('.image-thumb'));
+        currentIndex = currentImages.indexOf(img);
+        openViewer(currentImages[currentIndex].src);
+      });
+    });
+
+    function openViewer(src) {
+      document.getElementById('viewer-img').src = src;
+      document.getElementById('viewer').style.display = 'flex';
+    }
+
+    function closeViewer() {
+      document.getElementById('viewer').style.display = 'none';
+    }
+
+    // Swipe / tap next
+    let touchStartX = 0;
+    document.getElementById('viewer').addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.getElementById('viewer').addEventListener('touchend', function (e) {
+      let dx = e.changedTouches[0].screenX - touchStartX;
+      if (dx < -30) showNextImage();
+      else if (dx > 30) showPrevImage();
+    });
+
+    document.getElementById('viewer').addEventListener('click', function (e) {
+      if (e.target.id === 'viewer-img') return;
+      showNextImage();
+    });
+
+    function showNextImage() {
+      if (!currentImages.length) return;
+      currentIndex = (currentIndex + 1) % currentImages.length;
+      document.getElementById('viewer-img').src = currentImages[currentIndex].src;
+    }
+
+    function showPrevImage() {
+      if (!currentImages.length) return;
+      currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
+      document.getElementById('viewer-img').src = currentImages[currentIndex].src;
+    }
+  </script>
+</body>
+</html>
