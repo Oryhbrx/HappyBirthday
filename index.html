@@ -134,7 +134,11 @@
       max-height: 90%;
       border-radius: 8px;
     }
-
+    #loading-screen.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+  pointer-events: none;
+}
     #viewer .close-viewer {
       position: absolute;
       top: 20px;
@@ -296,5 +300,18 @@
       document.getElementById('viewer-img').src = currentImages[currentIndex].src;
     }
   </script>
+<script>
+  window.addEventListener("load", function () {
+    const loading = document.getElementById("loading-screen");
+    loading.style.display = "flex"; // show the loading screen
+
+setTimeout(() => {
+  loading.classList.add("fade-out");
+  setTimeout(() => {
+    loading.style.display = "none";
+  }, 1000); // Wait for fade to complete
+}, 10000);
+  });
+</script>
 </body>
 </html>
