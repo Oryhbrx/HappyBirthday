@@ -43,7 +43,7 @@
       align-items: center;
       font-size: 26px;
       font-weight: bold;
-      color: #d63384;
+      color: #e05555;
       z-index: 1000;
     }
 
@@ -164,7 +164,7 @@
 <body>
 
   <!-- Loading screen -->
-  <div id="loading-screen">💖Happy Birthday, Regine.<br>Today we celebrate not just your birth,<br>but the light, joy, and beauty you bring into our lives.<br>You make every moment more meaningful, every smile more genuine,<br>and every memory more special.<br>We’re so thankful you were born and even more thankful that we get<br>to love you every day.<br>You are deeply treasured. 💫❤️</div>
+  <div id="loading-screen"><i>Happy Birthday, Regine.<br>Today we celebrate not just your birth,<br>but the light, joy, and beauty you bring<br>into our lives.<br>You make every moment more meaningful,<br>every smile more genuine, and every memory<br>more special. We’re so thankful you were born<br>and even more thankful that we get to love you<br>every day. You are deeply treasured.</i>❤️</div>
 
   <!-- Desktop -->
   <div class="desktop">
@@ -231,7 +231,7 @@
       setTimeout(() => {
         document.getElementById("loading-screen").style.display = "none";
         document.getElementById("file-manager").style.display = "block";
-      }, 1500);
+      }, 10000);
     }
 
     function openFolder(id) {
