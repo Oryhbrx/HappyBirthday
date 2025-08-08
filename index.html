@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,15 +21,13 @@
       box-sizing: border-box;
     }
 
-.desktop-icon {
-  position: absolute;
-  top: 57vh;    /* Around cupcake height */
-  left: 65vw;   /* Around pointing finger */
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 100px;
-  cursor: pointer;
-  color: white;
+    .desktop-icon {
+      position: absolute;
+      text-align: center;
+      width: 100px;
+      cursor: pointer;
+      color: white;
+      transform: translate(-50%, -50%);
     }
 
     .desktop-icon img {
@@ -158,7 +155,6 @@
         width: 90%;
         height: 80%;
       }
-
       .image-thumb {
         width: 80px;
         height: 80px;
@@ -173,9 +169,17 @@
 
   <!-- Desktop -->
   <div class="desktop">
-    <div class="desktop-icon" onclick="openFileManager()">
+
+    <!-- File Manager Icon -->
+    <div class="desktop-icon" style="top: 57vh; left: 65vw;" onclick="openFileManager()">
       <img src="https://img.icons8.com/fluency/96/folder-invoices.png" />
       <div><b>File Manager</b></div>
+    </div>
+
+    <!-- Video Player Icon -->
+    <div class="desktop-icon" style="top: 57vh; left: 75vw;" onclick="openVideoPlayer()">
+      <img src="https://img.icons8.com/fluency/96/video-playlist.png" />
+      <div><b>Video Player</b></div>
     </div>
 
     <!-- File Manager -->
@@ -194,6 +198,20 @@
       </div>
     </div>
 
+    <!-- Video Player Window -->
+    <div class="file-manager-window" id="video-player">
+      <div class="file-manager-header">
+        🎥 Birthday Video
+        <span class="close" onclick="closeWindow('video-player')">✖</span>
+      </div>
+      <div class="window-content" style="justify-content:center;">
+        <video id="birthday-video" controls style="max-width:100%; max-height:350px; border-radius:8px;">
+          <source src="videos/birthday.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
     <!-- Photos Folder -->
     <div class="file-manager-window" id="photos">
       <div class="file-manager-header">
@@ -201,26 +219,7 @@
         <span class="close" onclick="closeWindow('photos')">✖</span>
       </div>
       <div class="window-content">
-        <img class="image-thumb" src="photos/photo1.jpg" />
-        <img class="image-thumb" src="photos/photo2.jpg" />
-        <img class="image-thumb" src="photos/photo3.jpg" />
-        <img class="image-thumb" src="photos/photo4.jpg" />
-        <img class="image-thumb" src="photos/photo5.jpg" />
-        <img class="image-thumb" src="photos/photo6.jpg" />
-        <img class="image-thumb" src="photos/photo7.jpg" />
-        <img class="image-thumb" src="photos/photo8.jpg" />
-        <img class="image-thumb" src="photos/photo9.jpg" />
-        <img class="image-thumb" src="photos/photo10.jpg" />
-        <img class="image-thumb" src="photos/photo11.jpg" />
-        <img class="image-thumb" src="photos/photo12.jpg" />
-        <img class="image-thumb" src="photos/photo13.jpg" />
-        <img class="image-thumb" src="photos/photo14.jpg" />
-        <img class="image-thumb" src="photos/photo15.jpg" />
-        <img class="image-thumb" src="photos/photo16.jpg" />
-        <img class="image-thumb" src="photos/photo17.jpg" />
-        <img class="image-thumb" src="photos/photo18.jpg" />
-        <img class="image-thumb" src="photos/photo19.jpg" />
-        <img class="image-thumb" src="photos/photo20.jpg" />
+        <!-- your images here -->
       </div>
     </div>
 
@@ -231,21 +230,7 @@
         <span class="close" onclick="closeWindow('greetings')">✖</span>
       </div>
       <div class="window-content">
-        <img class="image-thumb" src="greetings/greet1.jpg" />
-        <img class="image-thumb" src="greetings/greet2.jpg" />
-        <img class="image-thumb" src="greetings/greet3.jpg" />
-        <img class="image-thumb" src="greetings/greet4.jpg" />
-        <img class="image-thumb" src="greetings/greet5.jpg" />
-        <img class="image-thumb" src="greetings/greet6.jpg" />
-        <img class="image-thumb" src="greetings/greet7.jpg" />
-        <img class="image-thumb" src="greetings/greet8.jpg" />
-        <img class="image-thumb" src="greetings/greet9.jpg" />
-        <img class="image-thumb" src="greetings/greet10.jpg" />
-        <img class="image-thumb" src="greetings/greet11.jpg" />
-        <img class="image-thumb" src="greetings/greet12.jpg" />
-        <img class="image-thumb" src="greetings/greet13.jpg" />
-        <img class="image-thumb" src="greetings/greet14.jpg" />
-        <img class="image-thumb" src="greetings/greet15.jpg" /> 
+        <!-- your greetings images here -->
       </div>
     </div>
   </div>
@@ -255,6 +240,12 @@
     <span class="close-viewer" onclick="closeViewer()">✖</span>
     <img id="viewer-img" src="" />
   </div>
+
+  <!-- Retro Happy Birthday BGM -->
+  <audio id="birthday-bgm" loop>
+    <source src="audio/happy-birthday-retro.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 
   <script>
     let currentImages = [];
@@ -268,6 +259,14 @@
       }, 5000);
     }
 
+    function openVideoPlayer() {
+      closeAllWindows();
+      document.getElementById('video-player').style.display = 'block';
+      const bgm = document.getElementById('birthday-bgm');
+      bgm.currentTime = 0;
+      bgm.play();
+    }
+
     function openFolder(id) {
       closeAllWindows();
       document.getElementById(id).style.display = "block";
@@ -275,15 +274,18 @@
 
     function closeWindow(id) {
       document.getElementById(id).style.display = "none";
+      if (id === 'video-player') {
+        document.getElementById('birthday-bgm').pause();
+      }
     }
 
     function closeAllWindows() {
-      ['photos', 'greetings'].forEach(id => {
+      ['photos', 'greetings', 'video-player'].forEach(id => {
         document.getElementById(id).style.display = "none";
       });
     }
 
-    document.querySelectorAll('.image-thumb').forEach((img, index) => {
+    document.querySelectorAll('.image-thumb').forEach((img) => {
       img.addEventListener('click', function () {
         const parent = img.closest('.window-content');
         currentImages = Array.from(parent.querySelectorAll('.image-thumb'));
@@ -301,7 +303,6 @@
       document.getElementById('viewer').style.display = 'none';
     }
 
-    // Swipe / tap next
     let touchStartX = 0;
     document.getElementById('viewer').addEventListener('touchstart', function (e) {
       touchStartX = e.changedTouches[0].screenX;
